@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Guitar Controller Log Viewer</title>
+    <script src="js/vue.global.prod.js"></script>
+    <script src="js/app.js" defer></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+    <ul class="log" v-bind:style="{height: laneHeight + 'px'}">
+        <li v-for="item in frameItems" v-bind:class="{down: item[6], up: item[7]}">
+            <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
+                 v-bind:class="{red: item[0], open: item[5], pick: item[6]||item[7], down: item[6], up:item[7]}"></div>
+            <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
+                 v-bind:class="{green: item[1], open: item[5], pick: item[6]||item[7], down: item[6], up:item[7]}"></div>
+            <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
+                 v-bind:class="{blue: item[2], open: item[5], pick: item[6]||item[7], down: item[6], up:item[7]}"></div>
+            <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
+                 v-bind:class="{yellow: item[3], open: item[5], pick: item[6]||item[7], down: item[6], up:item[7]}"></div>
+            <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
+                 v-bind:class="{purple: item[4], open: item[5], pick: item[6]||item[7], down: item[6], up:item[7]}"></div>
+        </li>
+    </ul>
+    <div class="form">
+        <h3>Display Setting</h3>
+        <p>
+            <label for="speed">Speed: <select name="speed" id="speed" v-model="frameHeight" @change="itemReset">
+                <option value="2.25">0.5</option>
+                <option value="3">1.0</option>
+                <option value="3.75">1.5</option>
+                <option value="4.5">2.0</option>
+                <option value="6">2.5</option>
+                <option value="7">3.0</option>
+                <option value="8">3.5</option>
+                <option value="9">4.0</option>
+                <option value="10">4.5</option>
+                <option value="11">5.0</option>
+                <option value="12">5.5</option>
+                <option value="13">6.0</option>
+                <option value="14">6.5</option>
+                <option value="15">7.0</option>
+                <option value="16">7.5</option>
+                <option value="17">8.0</option>
+                <option value="18">8.5</option>
+                <option value="19">9.0</option>
+                <option value="20">9.5</option>
+                <option value="21">10.0</option>
+                <option value="41">20.0</option>
+            </select></label>
+        </p>
+        <p>
+            <label for="reverse">Reverse: <input type="checkbox" name="reverse" id="reverse" v-model="reverse"
+                                                 @change="itemReset"></label>
+        </p>
+        <p>
+            <label for="height">Height: <input type="text" size="4" id="height" v-model="laneHeight"
+                                               @change="itemReset">px</label>
+        </p>
+        <p>
+            Width: {{ laneWidth }} px
+        </p>
+        <p>Lifetime: {{ lifetime }}ms</p>
+        <hr>
+        <h3>
+            Input Setting
+        </h3>
+        <p>
+            Presets<br>
+            <button type="button" v-on:click="inputPreset([4,3,2,1,0,12,11])">KONAMI PREMIUM</button>
+            <button type="button" v-on:click="inputPreset([0,1,2,3,4,6,5])">GITALLER</button>
+        </p>
+        <p>
+            Buttons<br>
+            <label for="red">R:<input type="text" size="2" id="red" v-model="buttonRed"
+                                      @change="displayUrl"></label><br>
+            <label for="green">G:<input type="text" size="2" id="green" v-model="buttonGreen"
+                                        @change="displayUrl"></label><br>
+            <label for="blue">B:<input type="text" size="2" id="blue" v-model="buttonBlue" @change="displayUrl"></label><br>
+            <label for="yellow">Y:<input type="text" size="2" id="yellow" v-model="buttonYellow"
+                                         @change="displayUrl"></label><br>
+            <label for="purple">P:<input type="text" size="2" id="purple" v-model="buttonPurple"
+                                         @change="displayUrl"></label><br>
+            <br>
+            Picks<br>
+            <label for="up_pick">&nbsp;&nbsp;UP:<input type="text" size="2" id="up_pick" v-model="pickUp"
+                                                       @change="displayUrl"></label><br>
+            <label for="down_pick">DOWN:<input type="text" size="2" id="down_pick" v-model="pickDown"
+                                               @change="displayUrl"></label>
+        </p>
+        <hr>
+        <h3>URL</h3>
+        <p>
+            <input type="text" size="80" readonly v-model="url" onfocus="this.select();">
+        </p>
+    </div>
+    <div class="instruction">
+        <p>TODO 説明を書く</p>
+    </div>
+</div>
+</body>
+</html>
