@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Guitar Controller Log Viewer</title>
+    <title>ギタコン譜面ログ</title>
     <script src="js/vue.global.prod.js"></script>
     <script src="js/app.js" defer></script>
     <link rel="stylesheet" href="css/style.css">
@@ -10,28 +10,21 @@
 <body>
 <div id="app">
     <ul class="log" v-bind:style="{height: laneHeight + 'px', 'background-color': laneBackgroundColor, }">
-        <li v-for="item in frameItems" v-bind:class="{down: item[6], up: item[7]}">
+        <li v-for="item in frameItems" v-bind:class="{up: item[6], down: item[7],}">
             <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
-                 v-bind:class="{red: item[0], open: item[5], pick: item[6]||item[7], down: item[6], up:item[7]}"></div>
+                 v-bind:class="{red: item[0], open: item[5], pick: item[6]||item[7], up: item[6], down: item[7],}"></div>
             <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
-                 v-bind:class="{green: item[1], open: item[5], pick: item[6]||item[7], down: item[6], up:item[7]}"></div>
+                 v-bind:class="{green: item[1], open: item[5], pick: item[6]||item[7], up: item[6], down: item[7],}"></div>
             <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
-                 v-bind:class="{blue: item[2], open: item[5], pick: item[6]||item[7], down: item[6], up:item[7]}"></div>
+                 v-bind:class="{blue: item[2], open: item[5], pick: item[6]||item[7], up: item[6], down: item[7],}"></div>
             <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
-                 v-bind:class="{yellow: item[3], open: item[5], pick: item[6]||item[7], down: item[6], up:item[7]}"></div>
+                 v-bind:class="{yellow: item[3], open: item[5], pick: item[6]||item[7], up: item[6], down: item[7],}"></div>
             <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
-                 v-bind:class="{purple: item[4], open: item[5], pick: item[6]||item[7], down: item[6], up:item[7]}"></div>
+                 v-bind:class="{purple: item[4], open: item[5], pick: item[6]||item[7], up: item[6], down: item[7],}"></div>
         </li>
     </ul>
     <div class="form">
-        <h3>
-            入力設定
-        </h3>
-        <p>
-            プリセット<br>
-            <button type="button" v-on:click="inputPreset([4,3,2,1,0,12,11])">KONAMI PREMIUM</button>
-            <button type="button" v-on:click="inputPreset([0,1,2,3,4,6,5])">GITALLER</button>
-        </p>
+        <h3>入力設定</h3>
         <div class="input-buttons">
             <p>
                 ネックボタン<br>
@@ -54,8 +47,13 @@
                                                    @change="displayUrl"></label>
             </p>
         </div>
+        <p>
+            プリセット<br>
+            <button type="button" v-on:click="inputPreset([4,3,2,1,0,11,12])">KONAMI PREMIUM</button>
+            <button type="button" v-on:click="inputPreset([0,1,2,3,4,5,6])">GITALLER</button>
+        </p>
         <hr>
-        <h3>表示設定・情報</h3>
+        <h3>ゲームオプション設定</h3>
         <p>
             <label for="speed">Speed: <select name="speed" id="speed" v-model="frameHeight" @change="itemReset">
                 <option value="2.25">0.5</option>
@@ -81,41 +79,75 @@
                 <option value="41">20.0</option>
             </select></label>
         </p>
-        <p class="mb20">
+        <p>
             <label for="reverse">Reverse: <input type="checkbox" name="reverse" id="reverse" v-model="reverse"
                                                  @change="itemReset"></label>
         </p>
-        <p>
-            <label for="height">高さ: <input type="text" size="4" id="height" v-model="laneHeight"
-                                           @change="itemReset">px</label>
-        </p>
+        <hr>
+        <h3>表示設定・情報</h3>
         <p>
             幅: {{ laneWidth }} px
         </p>
+        <p>
+            <label for="height">高さ: <input type="text" size="4" id="height" v-model="laneHeight"
+                                           @change="itemReset"> px</label>
+        </p>
         <p class="mb20">レーン透明度:
             <input type="number" v-model="transparent" name="transparent" id="transparent" min="0" max="100" size="4"
-                   @change="displayUrl">
+                   @change="displayUrl"> %
         </p>
         <p>表示時間: {{ lifetime }}ms</p>
         <hr>
-        <h3 class="mb0">URL</h3>
+        <h3 class="mb0">URL（読み取り専用）</h3>
         <p>
-            <textarea cols="40" rows="3" readonly v-model="url" onfocus="this.select();"></textarea>
+            <textarea cols="40" rows="3" readonly v-model="url" onfocus="this.select();" id="url"></textarea>
         </p>
-        <h3 class="mb0">CSS</h3>
+        <h3 class="mb0">カスタムCSS（読み取り専用）</h3>
         <p>
-            <textarea cols="40" rows="2" readonly v-model="css" onfocus="this.select();"></textarea>
+            <textarea cols="40" rows="2" readonly v-model="css" onfocus="this.select();" id="css"></textarea>
         </p>
     </div>
     <div class="instruction">
-        <h2>Guitar Controller Input Log Viewer</h2>
-        <h3>使用方法</h3>
+        <h2>ギタコン譜面ログ</h2>
+        <h3>これは何？</h3>
         <p>
+            <a href="https://obsproject.com/ja" target="_blank">OBS Studio</a>でギターコントローラの入力ログを譜面で表示するためのツールです。<br>
+            ※表示内容がゲームの入力判定と異なる場合があります。
         </p>
+        <h3>使用方法</h3>
         <ol>
-            <li>あああ</li>
-            <li>いいい</li>
+            <li>「入力設定」にお使いのコントローラの各ボタンに対応する数字を入力してください。
+                <ul>
+                    <li>コナステGITADIRAコントローラ設定画面と同じ数字です。</li>
+                    <li>「プリセット」にボタンが表示されているコントローラはまとめて設定できます。</li>
+                </ul>
+            </li>
+            <li>コントローラのネック・ピックを操作して左の描画領域にログが表示されるか確認してください。
+                <ul>
+                    <li>「入力設定」に空欄がある場合動作しません。</li>
+                </ul>
+            </li>
+            <li>「ゲームオプション設定」「表示設定・情報」をお好みで設定してください。<br>
+                設定は「<label for="url">URL</label>」に記録されます。ブラウザでURLにアクセスすることで復元できます。
+            </li>
+            <li>OBSのソース追加で以下の設定を行ってください。
+                <ul>
+                    <li><label for="url">URL</label></li>
+                    <li>幅（ {{ laneWidth }}px 固定値 ）</li>
+                    <li><label for="height">高さ</label></li>
+                    <li><label for="css">カスタムCSS</label></li>
+                </ul>
+            </li>
+            <li>ゲームの譜面と同じタイミングで表示するには、OBS上で他の映像・音声を遅延させる必要があります。
+                <ul>
+                    <li>遅延時間は「表示設定・情報」の「表示時間」が参考になりますが、微調整する必要があるでしょう。（作者は+50msしています）</li>
+                    <li>映像は「レンダリング遅延」フィルタを使います。フィルタ1つあたり500msが上限なので、それ以上の場合は複数設定します。</li>
+                    <li>音声は「オーディオの詳細プロパティ」の「同期オフセット」で設定します。</li>
+                </ul>
+            </li>
         </ol>
+        <h3>連絡先</h3>
+        <p>Twitter: <a href="https://twitter.com/K_YukiDaruma" target="_blank">@K_YukiDaruma</a></p>
     </div>
 </div>
 </body>

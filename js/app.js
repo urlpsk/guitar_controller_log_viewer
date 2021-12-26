@@ -8,8 +8,8 @@ const vm = Vue.createApp({
             buttonBlue: '2',
             buttonYellow: '1',
             buttonPurple: '0',
-            pickUp: '12',
-            pickDown: '11',
+            pickUp: '11',
+            pickDown: '12',
             beforePick: '',
             frameHeight: 7,
             laneHeight: 500,
@@ -71,7 +71,7 @@ const vm = Vue.createApp({
             }());
         },
         itemReset: function () {
-            //rgbyp, open, down, up
+            //rgbyp, open, up, down,
             /*
             vm.frameItems = [
                 [1,1,1,1,1,0,1,0],
@@ -129,6 +129,7 @@ const vm = Vue.createApp({
             ];
             //GETパラメータを除外して追加
             vm.url = window.location.toString().replace(window.location.search, '') + '?' + params.join('&');
+            history.replaceState(null, null, vm.url);
         },
         isAnyButtonSettingEmpty: function () {
             return [vm.buttonRed, vm.buttonGreen, vm.buttonBlue, vm.buttonYellow, vm.buttonPurple, vm.pickUp, vm.pickDown]
@@ -157,7 +158,6 @@ const vm = Vue.createApp({
             };
         },
         laneWidth: function () {
-            //FIXME
             return 245;
         },
         lifetime: function () {

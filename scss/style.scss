@@ -56,6 +56,18 @@ body {
     }
 
     &.down {
+      &:before {
+        background-color: #A0A0A080;
+      }
+    }
+
+    &.up {
+      &:before {
+        background-color: #40404080;
+      }
+    }
+
+    &.down {
       &:after {
         content: url('../img/arrow_down.svg');
         position: absolute;
@@ -140,12 +152,12 @@ body {
 }
 
 .form {
-  margin-left: 10px;
+  margin-left: 1rem;
 }
 
 .form, .instruction {
   background-color: #000000;
-  padding: 0 10px;
+  padding: 0 1rem 1rem;
 
   p {
     margin: 10px 0;
@@ -162,6 +174,33 @@ body {
       margin: 0 30px 0 0;
     }
   }
+
+  li {
+    padding: 8px 0 0;
+  }
+
+  ol > li {
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    padding-left: 1rem;
+    list-style-type: disc;
+  }
+
+  hr {
+    border-color: #222;
+  }
+
+  textarea:read-only {
+    background-color: #DDD;
+  }
+}
+
+.instruction {
+  label {
+    text-decoration: underline dashed;
+  }
 }
 
 .mb0 {
@@ -170,4 +209,16 @@ body {
 
 .mb20 {
   margin-bottom: 20px !important;
+}
+
+h2, h3, h4 {
+  color: #84b6aa;
+}
+
+a {
+  color: #ffd2fb;
+
+  &:visited {
+    color: #ffb0f8;
+  }
 }
