@@ -3,7 +3,7 @@ $green: #6ADE72;
 $blue: #7CC2EF;
 $yellow: #FCFA90;
 $purple: #EF8EE7;
-$open: #784CB0;
+$open: #8c71ad;
 
 $note-width: 35px;
 $note-height: 6px;
@@ -16,7 +16,6 @@ body {
   background-color: #222;
   color: white;
   font-family: "BIZ UDゴシック", ui-monospace;
-  overflow: hidden;
 }
 
 #app {
@@ -141,5 +140,34 @@ body {
 }
 
 .form {
-  margin-left: 50px;
+  margin-left: 10px;
+}
+
+.form, .instruction {
+  background-color: #000000;
+  padding: 0 10px;
+
+  p {
+    margin: 10px 0;
+  }
+
+  button {
+    margin-right: 5px;
+  }
+
+  .input-buttons {
+    display: flex;
+
+    p {
+      margin: 0 30px 0 0;
+    }
+  }
+}
+
+.mb0 {
+  margin-bottom: 0 !important;
+}
+
+.mb20 {
+  margin-bottom: 20px !important;
 }

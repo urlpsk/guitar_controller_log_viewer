@@ -9,7 +9,7 @@
 </head>
 <body>
 <div id="app">
-    <ul class="log" v-bind:style="{height: laneHeight + 'px'}">
+    <ul class="log" v-bind:style="{height: laneHeight + 'px', 'background-color': laneBackgroundColor, }">
         <li v-for="item in frameItems" v-bind:class="{down: item[6], up: item[7]}">
             <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
                  v-bind:class="{red: item[0], open: item[5], pick: item[6]||item[7], down: item[6], up:item[7]}"></div>
@@ -24,7 +24,38 @@
         </li>
     </ul>
     <div class="form">
-        <h3>Display Setting</h3>
+        <h3>
+            入力設定
+        </h3>
+        <p>
+            プリセット<br>
+            <button type="button" v-on:click="inputPreset([4,3,2,1,0,12,11])">KONAMI PREMIUM</button>
+            <button type="button" v-on:click="inputPreset([0,1,2,3,4,6,5])">GITALLER</button>
+        </p>
+        <div class="input-buttons">
+            <p>
+                ネックボタン<br>
+                <label for="red">R:<input type="text" size="2" id="red" v-model="buttonRed"
+                                          @change="displayUrl"></label><br>
+                <label for="green">G:<input type="text" size="2" id="green" v-model="buttonGreen"
+                                            @change="displayUrl"></label><br>
+                <label for="blue">B:<input type="text" size="2" id="blue" v-model="buttonBlue"
+                                           @change="displayUrl"></label><br>
+                <label for="yellow">Y:<input type="text" size="2" id="yellow" v-model="buttonYellow"
+                                             @change="displayUrl"></label><br>
+                <label for="purple">P:<input type="text" size="2" id="purple" v-model="buttonPurple"
+                                             @change="displayUrl"></label>
+            </p>
+            <p>
+                ピック<br>
+                <label for="up_pick">&nbsp;&nbsp;UP:<input type="text" size="2" id="up_pick" v-model="pickUp"
+                                                           @change="displayUrl"></label><br>
+                <label for="down_pick">DOWN:<input type="text" size="2" id="down_pick" v-model="pickDown"
+                                                   @change="displayUrl"></label>
+            </p>
+        </div>
+        <hr>
+        <h3>表示設定・情報</h3>
         <p>
             <label for="speed">Speed: <select name="speed" id="speed" v-model="frameHeight" @change="itemReset">
                 <option value="2.25">0.5</option>
@@ -50,53 +81,41 @@
                 <option value="41">20.0</option>
             </select></label>
         </p>
-        <p>
+        <p class="mb20">
             <label for="reverse">Reverse: <input type="checkbox" name="reverse" id="reverse" v-model="reverse"
                                                  @change="itemReset"></label>
         </p>
         <p>
-            <label for="height">Height: <input type="text" size="4" id="height" v-model="laneHeight"
-                                               @change="itemReset">px</label>
+            <label for="height">高さ: <input type="text" size="4" id="height" v-model="laneHeight"
+                                           @change="itemReset">px</label>
         </p>
         <p>
-            Width: {{ laneWidth }} px
+            幅: {{ laneWidth }} px
         </p>
-        <p>Lifetime: {{ lifetime }}ms</p>
+        <p class="mb20">レーン透明度:
+            <input type="number" v-model="transparent" name="transparent" id="transparent" min="0" max="100" size="4"
+                   @change="displayUrl">
+        </p>
+        <p>表示時間: {{ lifetime }}ms</p>
         <hr>
-        <h3>
-            Input Setting
-        </h3>
+        <h3 class="mb0">URL</h3>
         <p>
-            Presets<br>
-            <button type="button" v-on:click="inputPreset([4,3,2,1,0,12,11])">KONAMI PREMIUM</button>
-            <button type="button" v-on:click="inputPreset([0,1,2,3,4,6,5])">GITALLER</button>
+            <textarea cols="40" rows="3" readonly v-model="url" onfocus="this.select();"></textarea>
         </p>
+        <h3 class="mb0">CSS</h3>
         <p>
-            Buttons<br>
-            <label for="red">R:<input type="text" size="2" id="red" v-model="buttonRed"
-                                      @change="displayUrl"></label><br>
-            <label for="green">G:<input type="text" size="2" id="green" v-model="buttonGreen"
-                                        @change="displayUrl"></label><br>
-            <label for="blue">B:<input type="text" size="2" id="blue" v-model="buttonBlue" @change="displayUrl"></label><br>
-            <label for="yellow">Y:<input type="text" size="2" id="yellow" v-model="buttonYellow"
-                                         @change="displayUrl"></label><br>
-            <label for="purple">P:<input type="text" size="2" id="purple" v-model="buttonPurple"
-                                         @change="displayUrl"></label><br>
-            <br>
-            Picks<br>
-            <label for="up_pick">&nbsp;&nbsp;UP:<input type="text" size="2" id="up_pick" v-model="pickUp"
-                                                       @change="displayUrl"></label><br>
-            <label for="down_pick">DOWN:<input type="text" size="2" id="down_pick" v-model="pickDown"
-                                               @change="displayUrl"></label>
-        </p>
-        <hr>
-        <h3>URL</h3>
-        <p>
-            <input type="text" size="80" readonly v-model="url" onfocus="this.select();">
+            <textarea cols="40" rows="2" readonly v-model="css" onfocus="this.select();"></textarea>
         </p>
     </div>
     <div class="instruction">
-        <p>TODO 説明を書く</p>
+        <h2>Guitar Controller Input Log Viewer</h2>
+        <h3>使用方法</h3>
+        <p>
+        </p>
+        <ol>
+            <li>あああ</li>
+            <li>いいい</li>
+        </ol>
     </div>
 </div>
 </body>

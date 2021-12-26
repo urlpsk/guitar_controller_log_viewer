@@ -14,6 +14,7 @@ const vm = Vue.createApp({
             frameHeight: 7,
             laneHeight: 500,
             reverse: false,
+            transparent: 1,
             url: '',
         }
     },
@@ -86,7 +87,6 @@ const vm = Vue.createApp({
             */
             vm.frameItems = Array.from(Array(vm.frameNumber), () => [0, 0, 0, 0, 0, 0, 0, 0]);
             this.displayUrl();
-
         },
         inputPreset: function (presets) {
             [vm.buttonRed, vm.buttonGreen, vm.buttonBlue, vm.buttonYellow, vm.buttonPurple, vm.pickUp, vm.pickDown] = presets;
@@ -106,6 +106,9 @@ const vm = Vue.createApp({
                     case 'h':
                         vm.laneHeight = v;
                         break;
+                    case 't' :
+                        vm.transparent = v;
+                        break;
                     case 'b':
                         [vm.buttonRed, vm.buttonGreen, vm.buttonBlue, vm.buttonYellow, vm.buttonPurple] = v.split(',');
                         break;
@@ -120,6 +123,7 @@ const vm = Vue.createApp({
                 's=' + vm.frameHeight,
                 'r=' + (vm.reverse ? 1 : 0),
                 'h=' + vm.laneHeight,
+                't=' + vm.transparent,
                 'b=' + [vm.buttonRed, vm.buttonGreen, vm.buttonBlue, vm.buttonYellow, vm.buttonPurple].join(','),
                 'p=' + [vm.pickUp, vm.pickDown].join(','),
             ];
@@ -158,6 +162,12 @@ const vm = Vue.createApp({
         },
         lifetime: function () {
             return Math.round(1000.0 / 60 * this.frameNumber);
+        },
+        laneBackgroundColor: function () {
+            return 'rgba(0,0,0,' + (100 - this.transparent) * 0.01 + ')';
+        },
+        css: function () {
+            return 'body{ background-color: transparent; overflow: hidden;}';
         },
     },
 }).mount('#app');

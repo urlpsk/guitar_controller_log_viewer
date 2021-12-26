@@ -4,7 +4,6 @@ body {
   background-color: #222;
   color: white;
   font-family: "BIZ UDゴシック", ui-monospace;
-  overflow: hidden;
 }
 
 #app {
@@ -86,16 +85,47 @@ body {
 .log li .lane.yellow:before, .log li .lane.yellow:after {
   background-color: #FCFA90;
 }
+
 .log li .lane.purple:before, .log li .lane.purple:after {
   background-color: #EF8EE7;
 }
+
 .log li .lane.open:after {
-  background-color: #784CB0;
+  background-color: #8c71ad;
   width: 39px;
 }
 
 .form {
-  margin-left: 50px;
+  margin-left: 10px;
+}
+
+.form, .instruction {
+  background-color: #000000;
+  padding: 0 10px;
+}
+
+.form p, .instruction p {
+  margin: 10px 0;
+}
+
+.form button, .instruction button {
+  margin-right: 5px;
+}
+
+.form .input-buttons, .instruction .input-buttons {
+  display: flex;
+}
+
+.form .input-buttons p, .instruction .input-buttons p {
+  margin: 0 30px 0 0;
+}
+
+.mb0 {
+  margin-bottom: 0 !important;
+}
+
+.mb20 {
+  margin-bottom: 20px !important;
 }
 
 /*# sourceMappingURL=style.css.map */
