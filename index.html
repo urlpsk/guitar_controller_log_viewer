@@ -9,17 +9,18 @@
 </head>
 <body>
 <div id="app">
-    <ul class="log" v-bind:style="{height: laneHeight + 'px', 'background-color': laneBackgroundColor, }">
+    <ul class="log"
+        v-bind:style="{height: settings.laneHeight + 'px', 'background-color': laneBackgroundColor, }">
         <li v-for="item in frameItems" v-bind:class="{up: item[6], down: item[7],}">
-            <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
+            <div class="lane" v-bind:style="{height: settings.frameHeight + 'px'}"
                  v-bind:class="{red: item[0], open: item[5], pick: item[6]||item[7], up: item[6], down: item[7],}"></div>
-            <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
+            <div class="lane" v-bind:style="{height: settings.frameHeight + 'px'}"
                  v-bind:class="{green: item[1], open: item[5], pick: item[6]||item[7], up: item[6], down: item[7],}"></div>
-            <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
+            <div class="lane" v-bind:style="{height: settings.frameHeight + 'px'}"
                  v-bind:class="{blue: item[2], open: item[5], pick: item[6]||item[7], up: item[6], down: item[7],}"></div>
-            <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
+            <div class="lane" v-bind:style="{height: settings.frameHeight + 'px'}"
                  v-bind:class="{yellow: item[3], open: item[5], pick: item[6]||item[7], up: item[6], down: item[7],}"></div>
-            <div class="lane" v-bind:style="{height: frameHeight + 'px'}"
+            <div class="lane" v-bind:style="{height: settings.frameHeight + 'px'}"
                  v-bind:class="{purple: item[4], open: item[5], pick: item[6]||item[7], up: item[6], down: item[7],}"></div>
         </li>
     </ul>
@@ -28,22 +29,22 @@
         <div class="input-buttons">
             <p>
                 ネックボタン<br>
-                <label for="red">R:<input type="text" size="2" id="red" v-model="buttonRed"
+                <label for="red">R:<input type="text" size="2" id="red" v-model="settings.buttons[0]"
                                           @change="displayUrl"></label><br>
-                <label for="green">G:<input type="text" size="2" id="green" v-model="buttonGreen"
+                <label for="green">G:<input type="text" size="2" id="green" v-model="settings.buttons[1]"
                                             @change="displayUrl"></label><br>
-                <label for="blue">B:<input type="text" size="2" id="blue" v-model="buttonBlue"
+                <label for="blue">B:<input type="text" size="2" id="blue" v-model="settings.buttons[2]"
                                            @change="displayUrl"></label><br>
-                <label for="yellow">Y:<input type="text" size="2" id="yellow" v-model="buttonYellow"
+                <label for="yellow">Y:<input type="text" size="2" id="yellow" v-model="settings.buttons[3]"
                                              @change="displayUrl"></label><br>
-                <label for="purple">P:<input type="text" size="2" id="purple" v-model="buttonPurple"
+                <label for="purple">P:<input type="text" size="2" id="purple" v-model="settings.buttons[4]"
                                              @change="displayUrl"></label>
             </p>
             <p>
                 ピック<br>
-                <label for="up_pick">&nbsp;&nbsp;UP:<input type="text" size="2" id="up_pick" v-model="pickUp"
+                <label for="up_pick">&nbsp;&nbsp;UP:<input type="text" size="2" id="up_pick" v-model="settings.picks[0]"
                                                            @change="displayUrl"></label><br>
-                <label for="down_pick">DOWN:<input type="text" size="2" id="down_pick" v-model="pickDown"
+                <label for="down_pick">DOWN:<input type="text" size="2" id="down_pick" v-model="settings.picks[1]"
                                                    @change="displayUrl"></label>
             </p>
         </div>
@@ -55,7 +56,8 @@
         <hr>
         <h3>ゲームオプション設定</h3>
         <p>
-            <label for="speed">Speed: <select name="speed" id="speed" v-model="frameHeight" @change="itemReset">
+            <label for="speed">Speed: <select name="speed" id="speed" v-model="settings.frameHeight"
+                                              @change="itemReset">
                 <option value="2.25">0.5</option>
                 <option value="3">1.0</option>
                 <option value="3.75">1.5</option>
@@ -80,7 +82,7 @@
             </select></label>
         </p>
         <p>
-            <label for="reverse">Reverse: <input type="checkbox" name="reverse" id="reverse" v-model="reverse"
+            <label for="reverse">Reverse: <input type="checkbox" name="reverse" id="reverse" v-model="settings.reverse"
                                                  @change="itemReset"></label>
         </p>
         <hr>
@@ -89,12 +91,12 @@
             幅: {{ laneWidth }} px
         </p>
         <p>
-            <label for="height">高さ: <input type="text" size="4" id="height" v-model="laneHeight"
+            <label for="height">高さ: <input type="text" size="4" id="height" v-model="settings.laneHeight"
                                            @change="itemReset"> px</label>
         </p>
         <p class="mb20">レーン透明度:
-            <input type="number" v-model="transparent" name="transparent" id="transparent" min="0" max="100" size="4"
-                   @change="displayUrl"> %
+            <input type="number" v-model="settings.transparent" name="transparent" id="transparent" min="0" max="100"
+                   size="4" @change="displayUrl"> %
         </p>
         <p>表示時間: {{ lifetime }}ms</p>
         <hr>
@@ -116,19 +118,19 @@
         </p>
         <h3>使用方法</h3>
         <ol>
-            <li>「入力設定」にお使いのコントローラの各ボタンに対応する数字を入力してください。
+            <li><span class="title-text">入力設定</span>にお使いのコントローラの各ボタンに対応する数字を入力してください。
                 <ul>
-                    <li>コナステGITADIRAコントローラ設定画面と同じ数字です。</li>
+                    <li>コナステGITADIRAのコントローラ設定画面と同じ数字です。</li>
                     <li>「プリセット」にボタンが表示されているコントローラはまとめて設定できます。</li>
                 </ul>
             </li>
             <li>コントローラのネック・ピックを操作して左の描画領域にログが表示されるか確認してください。
                 <ul>
-                    <li>「入力設定」に空欄がある場合動作しません。</li>
+                    <li><span class="title-text">入力設定</span>に空欄や不正な値がある場合は一切動作しません。</li>
                 </ul>
             </li>
-            <li>「ゲームオプション設定」「表示設定・情報」をお好みで設定してください。<br>
-                設定は「<label for="url">URL</label>」に記録されます。ブラウザでURLにアクセスすることで復元できます。
+            <li><span class="title-text">ゲームオプション設定</span>・<span class="title-text">表示設定・情報</span>をお好みで設定してください。<br>
+                設定は「<label for="url">URL</label>」に記録されます。ブラウザでこのURLにアクセスすることで復元できます。
             </li>
             <li>OBSのソース追加で以下の設定を行ってください。
                 <ul>
@@ -140,7 +142,7 @@
             </li>
             <li>ゲームの譜面と同じタイミングで表示するには、OBS上で他の映像・音声を遅延させる必要があります。
                 <ul>
-                    <li>遅延時間は「表示設定・情報」の「表示時間」が参考になりますが、微調整する必要があるでしょう。（作者は+50msしています）</li>
+                    <li>遅延時間は<span class="title-text">表示設定・情報</span>の「表示時間」が参考になりますが、微調整する必要があるでしょう。（作者は+50msしています）</li>
                     <li>映像は「レンダリング遅延」フィルタを使います。フィルタ1つあたり500msが上限なので、それ以上の場合は複数設定します。</li>
                     <li>音声は「オーディオの詳細プロパティ」の「同期オフセット」で設定します。</li>
                 </ul>

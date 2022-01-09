@@ -1,20 +1,16 @@
 const vm = Vue.createApp({
     data() {
         return {
-            gamePad: null,
+            settings: {
+                buttons: ['4', '3', '2', '1', '0'],
+                picks: ['11', '12'],
+                frameHeight: 7,
+                laneHeight: 500,
+                reverse: false,
+                transparent: 1,
+            },
             frameItems: [],
-            buttonRed: '4',
-            buttonGreen: '3',
-            buttonBlue: '2',
-            buttonYellow: '1',
-            buttonPurple: '0',
-            pickUp: '11',
-            pickDown: '12',
             beforePick: '',
-            frameHeight: 7,
-            laneHeight: 500,
-            reverse: false,
-            transparent: 1,
             url: '',
         }
     },
@@ -23,8 +19,8 @@ const vm = Vue.createApp({
             this.setSettingsFromUrl();
             this.itemReset();
             (function loop() {
-                vm.gamePad = navigator.getGamepads()[0];
-                if (!vm.gamePad || vm.isAnyButtonSettingEmpty()) {
+                const gamePad = navigator.getGamepads()[0];
+                if (!gamePad || vm.isAnyButtonSettingInvalid()) {
                     requestAnimationFrame(loop);
                     return;
                 }
@@ -34,7 +30,7 @@ const vm = Vue.createApp({
                 //button
                 let isOpen = true;
                 for (const buttonName in vm.buttonMap) {
-                    const isPressed = vm.gamePad.buttons[vm.buttonMap[buttonName]].pressed;
+                    const isPressed = gamePad.buttons[vm.buttonMap[buttonName]].pressed;
                     frameData.push(isPressed);
                     if (isPressed) {
                         isOpen = false;
@@ -45,7 +41,7 @@ const vm = Vue.createApp({
                 //pick
                 let anyPicked = false;
                 for (const pickName in vm.pickMap) {
-                    const isPressed = vm.gamePad.buttons[vm.pickMap[pickName]].pressed;
+                    const isPressed = gamePad.buttons[vm.pickMap[pickName]].pressed;
                     const isSamePick = vm.beforePick === pickName;
                     const isPickActive = isPressed && !isSamePick;
                     frameData.push(isPickActive);
@@ -59,7 +55,7 @@ const vm = Vue.createApp({
                     vm.beforePick = "";
                 }
 
-                if (vm.reverse) {
+                if (vm.settings.reverse) {
                     vm.frameItems.unshift(frameData);
                     vm.frameItems.pop();
                 } else {
@@ -89,7 +85,8 @@ const vm = Vue.createApp({
             this.displayUrl();
         },
         inputPreset: function (presets) {
-            [vm.buttonRed, vm.buttonGreen, vm.buttonBlue, vm.buttonYellow, vm.buttonPurple, vm.pickUp, vm.pickDown] = presets;
+            vm.settings.buttons = presets.slice(0, -2);
+            vm.settings.picks = presets.slice(-2);
             this.displayUrl();
         },
         setSettingsFromUrl: function () {
@@ -98,63 +95,66 @@ const vm = Vue.createApp({
             for (const [k, v] of params) {
                 switch (k) {
                     case 's':
-                        vm.frameHeight = v;
+                        vm.settings.frameHeight = v;
                         break;
                     case 'r':
-                        vm.reverse = v == 1;
+                        vm.settings.reverse = v == 1;
                         break;
                     case 'h':
-                        vm.laneHeight = v;
+                        vm.settings.laneHeight = v;
                         break;
                     case 't' :
-                        vm.transparent = v;
+                        vm.settings.transparent = v;
                         break;
                     case 'b':
-                        [vm.buttonRed, vm.buttonGreen, vm.buttonBlue, vm.buttonYellow, vm.buttonPurple] = v.split(',');
+                        vm.settings.buttons = v.split(',');
                         break;
                     case 'p':
-                        [vm.pickUp, vm.pickDown] = v.split(',')
+                        vm.settings.picks = v.split(',');
+                        break;
+                    case 'c':
+                        vm.settings.controllerRefreshRate = v;
                         break;
                 }
             }
         },
         displayUrl: function () {
             const params = [
-                's=' + vm.frameHeight,
-                'r=' + (vm.reverse ? 1 : 0),
-                'h=' + vm.laneHeight,
-                't=' + vm.transparent,
-                'b=' + [vm.buttonRed, vm.buttonGreen, vm.buttonBlue, vm.buttonYellow, vm.buttonPurple].join(','),
-                'p=' + [vm.pickUp, vm.pickDown].join(','),
+                's=' + vm.settings.frameHeight,
+                'r=' + (vm.settings.reverse ? 1 : 0),
+                'h=' + vm.settings.laneHeight,
+                't=' + vm.settings.transparent,
+                'b=' + vm.settings.buttons.join(','),
+                'p=' + vm.settings.picks.join(','),
             ];
             //GETパラメータを除外して追加
             vm.url = window.location.toString().replace(window.location.search, '') + '?' + params.join('&');
             history.replaceState(null, null, vm.url);
         },
-        isAnyButtonSettingEmpty: function () {
-            return [vm.buttonRed, vm.buttonGreen, vm.buttonBlue, vm.buttonYellow, vm.buttonPurple, vm.pickUp, vm.pickDown]
+        isAnyButtonSettingInvalid: function () {
+            return [...vm.settings.buttons, ...vm.settings.picks]
                 .filter(item => {
-                    return item === '';
+                    return !/^\d+$/.test(item);
                 }).length > 0;
         },
     },
     computed: {
         frameNumber: function () {
-            return Math.ceil(parseFloat(this.laneHeight) / this.frameHeight);
+            return Math.ceil(parseFloat(this.settings.laneHeight) / this.settings.frameHeight);
         },
         buttonMap: function () {
             return {
-                'red': this.buttonRed,
-                'green': this.buttonGreen,
-                'blue': this.buttonBlue,
-                'yellow': this.buttonYellow,
-                'purple': this.buttonPurple,
+                'red': this.settings.buttons[0],
+                'green': this.settings.buttons[1],
+                'blue': this.settings.buttons[2],
+                'yellow': this.settings.buttons[3],
+                'purple': this.settings.buttons[4],
             };
         },
         pickMap: function () {
             return {
-                'up_pick': this.pickUp,
-                'down_pick': this.pickDown,
+                'up_pick': this.settings.picks[0],
+                'down_pick': this.settings.picks[1],
             };
         },
         laneWidth: function () {
@@ -164,7 +164,7 @@ const vm = Vue.createApp({
             return Math.round(1000.0 / 60 * this.frameNumber);
         },
         laneBackgroundColor: function () {
-            return 'rgba(0,0,0,' + (100 - this.transparent) * 0.01 + ')';
+            return 'rgba(0,0,0,' + (100 - this.settings.transparent) * 0.01 + ')';
         },
         css: function () {
             return 'body{ background-color: transparent; overflow: hidden;}';

@@ -11,6 +11,8 @@ $lane-width: 39px;
 $beam-width: 2px;
 $pick-height: 1px;
 
+$title-color: #84b6aa;
+
 body {
   margin: 0;
   background-color: #222;
@@ -211,8 +213,8 @@ body {
   margin-bottom: 20px !important;
 }
 
-h2, h3, h4 {
-  color: #84b6aa;
+h2, h3, h4, .title-text {
+  color: $title-color;
 }
 
 a {

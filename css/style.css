@@ -148,7 +148,7 @@ body {
   margin-bottom: 20px !important;
 }
 
-h2, h3, h4 {
+h2, h3, h4, .title-text {
   color: #84b6aa;
 }
 
