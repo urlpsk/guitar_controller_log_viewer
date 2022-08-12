@@ -35,7 +35,7 @@ body {
   position: absolute;
   width: 35px;
   height: 6px;
-  top: 50%;
+  top: calc(50% - 0.5px);
   margin-top: -3px;
   border: none;
 }
@@ -43,7 +43,7 @@ body {
   background-color: #A0A0A080;
 }
 .log li.up:before {
-  background-color: #40404080;
+  background-color: transparent;
 }
 .log li.down:after {
   content: url("../img/arrow_down.svg");
@@ -68,34 +68,72 @@ body {
 .log li .lane:before {
   content: "";
   position: absolute;
-  width: 2px;
+  width: 7px;
   height: 100%;
   top: 0;
   left: 50%;
-  margin-left: -1px;
-  filter: brightness(40%);
+  margin-left: -3.5px;
 }
 .log li .lane.red:after, .log li .lane.green:after, .log li .lane.blue:after, .log li .lane.yellow:after, .log li .lane.purple:after {
   border: black 1px solid;
   margin-left: 1px;
 }
-.log li .lane.red:before, .log li .lane.red:after {
-  background-color: #EA5352;
+.log li .lane.red:before {
+  background: linear-gradient(to right, #250007, 45%, #805761, 55%, #250007);
 }
-.log li .lane.green:before, .log li .lane.green:after {
-  background-color: #6ADE72;
+.log li .lane.red:after {
+  background: radial-gradient(#FFC3B8, #E12F3B, #A42833);
 }
-.log li .lane.blue:before, .log li .lane.blue:after {
-  background-color: #7CC2EF;
+.log li .lane.green:before {
+  background: linear-gradient(to right, #08250B, 45%, #4D684D, 55%, #08250B);
 }
-.log li .lane.yellow:before, .log li .lane.yellow:after {
-  background-color: #FCFA90;
+.log li .lane.green:after {
+  background: radial-gradient(#B5FBBD, #4CD24E, #35933F);
 }
-.log li .lane.purple:before, .log li .lane.purple:after {
-  background-color: #EF8EE7;
+.log li .lane.blue:before {
+  background: linear-gradient(to right, #041A21, 45%, #475A5E, 55%, #041A21);
 }
-.log li .lane.open:after {
-  background-color: #8c71ad;
+.log li .lane.blue:after {
+  background: radial-gradient(#D6FFFF, #71BFF1, #315E85);
+}
+.log li .lane.yellow:before {
+  background: linear-gradient(to right, #181408, 45%, #706857, 55%, #181408);
+}
+.log li .lane.yellow:after {
+  background: radial-gradient(#FFFA8F, #F9DA79, #94712A);
+}
+.log li .lane.purple:before {
+  background: linear-gradient(to right, #2A021F, 45%, #66475F, 55%, #2A021F);
+}
+.log li .lane.purple:after {
+  background: radial-gradient(#FF80F9, #EF69DD, #7A0465);
+}
+.log li.down .lane:nth-child(1).open:after, .log li.up .lane:nth-child(1).open:after {
+  background: linear-gradient(to right, #9D2982, #EF4CEA);
+  width: 39px;
+}
+.log li.down .lane:nth-child(2).open:after, .log li.up .lane:nth-child(2).open:after {
+  background: linear-gradient(to right, #EF4CEA, #E3B3E6);
+  width: 39px;
+}
+.log li.down .lane:nth-child(3).open:after, .log li.up .lane:nth-child(3).open:after {
+  background-color: #E3B3E6;
+  width: 39px;
+}
+.log li.down .lane:nth-child(3).open:before, .log li.up .lane:nth-child(3).open:before {
+  position: absolute;
+  top: calc(50% - 12px);
+  left: -3px;
+  width: 54px;
+  content: url("../img/open.svg");
+  z-index: 1;
+}
+.log li.down .lane:nth-child(4).open:after, .log li.up .lane:nth-child(4).open:after {
+  background: linear-gradient(to right, #E3B3E6, #EF4CEA);
+  width: 39px;
+}
+.log li.down .lane:nth-child(5).open:after, .log li.up .lane:nth-child(5).open:after {
+  background: linear-gradient(to right, #EF4CEA, #9D2982);
   width: 39px;
 }
 
@@ -109,6 +147,7 @@ body {
 }
 .form p, .instruction p {
   margin: 10px 0;
+  line-height: 1.25em;
 }
 .form button, .instruction button {
   margin-right: 5px;
@@ -121,6 +160,7 @@ body {
 }
 .form li, .instruction li {
   padding: 8px 0 0;
+  line-height: 1.1em;
 }
 .form ol > li, .instruction ol > li {
   margin-bottom: 1rem;
@@ -137,7 +177,8 @@ body {
 }
 
 .instruction label {
-  text-decoration: underline dashed;
+  cursor: pointer;
+  text-decoration-line: underline;
 }
 
 .mb0 {

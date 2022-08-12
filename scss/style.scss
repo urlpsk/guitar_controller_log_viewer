@@ -1,17 +1,91 @@
-$red: #EA5352;
-$green: #6ADE72;
-$blue: #7CC2EF;
-$yellow: #FCFA90;
-$purple: #EF8EE7;
-$open: #8c71ad;
+$red: (
+        "beam": (
+                "center": #805761,
+                "edge": #250007,
+        ),
+        "chip": (
+                "center": #FFC3B8,
+                "middle": #E12F3B,
+                "edge": #A42833,
+        ),
+);
+
+$green: (
+        "beam": (
+                "center": #4D684D,
+                "edge": #08250B,
+        ),
+        "chip": (
+                "center": #B5FBBD,
+                "middle": #4CD24E,
+                "edge": #35933F,
+        ),
+);
+
+$blue: (
+        "beam": (
+                "center": #475A5E,
+                "edge": #041A21,
+        ),
+        "chip": (
+                "center": #D6FFFF,
+                "middle": #71BFF1,
+                "edge": #315E85,
+        ),
+);
+
+$yellow: (
+        "beam": (
+                "center": #706857,
+                "edge": #181408,
+        ),
+        "chip": (
+                "center": #FFFA8F,
+                "middle": #F9DA79,
+                "edge": #94712A,
+        ),
+);
+
+$purple: (
+        "beam": (
+                "center": #66475F,
+                "edge": #2A021F,
+        ),
+        "chip": (
+                "center": #FF80F9,
+                "middle": #EF69DD,
+                "edge": #7A0465,
+        ),
+);
+
+$open1: #9D2982;
+$open2: #EF4CEA;
+$open3: #E3B3E6;
 
 $note-width: 35px;
 $note-height: 6px;
 $lane-width: 39px;
-$beam-width: 2px;
+$beam-width: 7px;
 $pick-height: 1px;
 
 $title-color: #84b6aa;
+
+@mixin chip($map) {
+  background: radial-gradient(map-get($map, center), map-get($map, middle), map-get($map, edge));
+}
+
+@mixin beam($map) {
+  background: linear-gradient(to right, map-get($map, edge), 45%, map-get($map, center), 55%, map-get($map, edge));
+}
+
+@mixin lane($map) {
+  &:before {
+    @include beam(map-get($map, beam));
+  }
+  &:after {
+    @include chip(map-get($map, chip));
+  }
+}
 
 body {
   margin: 0;
@@ -51,7 +125,7 @@ body {
         position: absolute;
         width: $note-width;
         height: $note-height;
-        top: 50%;
+        top: calc(50% - 0.5px);
         margin-top: - $note-height / 2;
         border: none;
       }
@@ -65,7 +139,7 @@ body {
 
     &.up {
       &:before {
-        background-color: #40404080;
+        background-color: transparent;
       }
     }
 
@@ -103,7 +177,6 @@ body {
         top: 0;
         left: 50%;
         margin-left: - $beam-width / 2;
-        filter: brightness(40%);
       }
 
       &.red, &.green, &.blue, &.yellow, &.purple {
@@ -114,39 +187,73 @@ body {
       }
 
       &.red {
-        &:before, &:after {
-          background-color: $red;
-        }
+        @include lane($red);
       }
 
       &.green {
-        &:before, &:after {
-          background-color: $green;
-        }
+        @include lane($green);
       }
 
       &.blue {
-        &:before, &:after {
-          background-color: $blue;
-        }
+        @include lane($blue);
       }
 
       &.yellow {
-        &:before, &:after {
-          background-color: $yellow;
-        }
+        @include lane($yellow);
       }
 
       &.purple {
-        &:before, &:after {
-          background-color: $purple;
+        @include lane($purple);
+      }
+    }
+
+    &.down, &.up{
+      .lane:nth-child(1) {
+        &.open {
+          &:after {
+            background: linear-gradient(to right, $open1, $open2);
+            width: $lane-width;
+          }
         }
       }
-
-      &.open {
-        &:after {
-          background-color: $open;
-          width: $lane-width;
+      .lane:nth-child(2) {
+        &.open {
+          &:after {
+            background: linear-gradient(to right, $open2, $open3);
+            width: $lane-width;
+          }
+        }
+      }
+      .lane:nth-child(3) {
+        &.open {
+          &:after {
+            background-color: $open3;
+            width: $lane-width;
+          }
+          &:before {
+            position: absolute;
+            top: calc( 50% - 12px );
+            left: -3px;
+            width: 54px;
+            content: url("../img/open.svg");
+            z-index: 1;
+          }
+        }
+      }
+      .lane:nth-child(4) {
+        &.open {
+          &:after {
+            background: linear-gradient(to right, $open3, $open2);
+            width: $lane-width;
+          }
+        }
+      }
+      .lane:nth-child(5) {
+        &.open {
+          &:after {
+            background: linear-gradient(to right, $open2, $open1);
+            width: $lane-width;
+          }
         }
       }
     }
@@ -163,6 +270,7 @@ body {
 
   p {
     margin: 10px 0;
+    line-height: 1.25em;
   }
 
   button {
@@ -179,6 +287,7 @@ body {
 
   li {
     padding: 8px 0 0;
+    line-height: 1.1em;
   }
 
   ol > li {
@@ -201,7 +310,8 @@ body {
 
 .instruction {
   label {
-    text-decoration: underline dashed;
+    cursor: pointer;
+    text-decoration-line: underline;
   }
 }
 
