@@ -4,7 +4,7 @@ const vm = Vue.createApp({
         return {
             settings: {
                 buttons: ['4', '3', '2', '1', '0'],
-                colors: ['rgba(255,255,255,1)', 'rgba(255,192,192,1)', 'rgba(192,192,192,1)', 'rgba(192,255,192,1)', 'rgba(128,128,128,1)'],
+                colors: ['rgba(255,255,255,1)', 'rgba(255,255,255,1)', 'rgba(128,128,128,1)', 'rgba(128,128,128,1)', 'rgba(192,192,192,0)'],
                 picks: ['11', '12'],
                 frameHeight: 7,
                 laneHeight: 500,
