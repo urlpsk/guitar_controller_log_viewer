@@ -5,13 +5,32 @@
     <title>ギタコン譜面ログ</title>
     <script src="js/vue.global.prod.js"></script>
     <script src="js/app.js" defer></script>
+    <script src="js/jscolor.min.js"></script>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ピックアイコン色の動的変更用 */
+        .log li.down::after {
+        }
+
+        .log li.down.isContinuousSamePick::after {
+        }
+
+        .log li.up::after {
+        }
+
+        .log li.up.isContinuousSamePick::after {
+        }
+
+        .log li.isPickEmpty::after {
+        }
+    </style>
 </head>
 <body>
 <div id="app">
     <ul class="log"
         v-bind:style="{height: settings.laneHeight + 'px', 'background-color': laneBackgroundColor, }">
-        <li v-for="item in frameItems" v-bind:class="{up: item[6], down: item[7],}">
+        <li v-for="item in frameItems"
+            v-bind:class="{up: item[6], down: item[7], isContinuousSamePick: item[8], isPickEmpty: item[9],}">
             <div class="lane" v-bind:style="{height: settings.frameHeight + 'px'}"
                  v-bind:class="{red: item[0], open: item[5], pick: item[6]||item[7], up: item[6], down: item[7],}"></div>
             <div class="lane" v-bind:style="{height: settings.frameHeight + 'px'}"
@@ -92,17 +111,29 @@
         </p>
         <p>
             <label for="height">高さ: <input type="text" size="4" id="height" v-model="settings.laneHeight"
-                                           @change="itemReset"> px</label>
+                                            @change="itemReset"> px</label>
         </p>
-        <p class="mb20">レーン透明度:
+        <p>表示時間: {{ lifetime }}ms</p>
+        <p>レーン透明度:
             <input type="number" v-model="settings.transparent" name="transparent" id="transparent" min="0" max="100"
                    size="4" @change="displayUrl"> %
         </p>
-        <p>表示時間: {{ lifetime }}ms</p>
+        <p class="color-setting">
+            <span>ダウン</span><input data-jscolor="{format: 'rgba'}" v-model="settings.colors[0]" @change="updateColor"
+                                   name="down_pick_color"><br>
+            <span>連ダウン</span><input data-jscolor="{format: 'rgba'}" v-model="settings.colors[1]" @change="updateColor"
+                                     name="continuous_down_pick_color"><br>
+            <span>アップ</span><input data-jscolor="{format: 'rgba'}" v-model="settings.colors[2]" @change="updateColor"
+                                   name="up_pick_color"><br>
+            <span>連アップ</span><input data-jscolor="{format: 'rgba'}" v-model="settings.colors[3]" @change="updateColor"
+                                     name="continuous_up_pick_color"><br>
+            <span>無ピック</span><input data-jscolor="{format: 'rgba'}" v-model="settings.colors[4]" @change="updateColor"
+                                     name="empty_pick_color">
+        </p>
         <hr>
         <h3 class="mb0">URL（読み取り専用）</h3>
         <p>
-            <textarea cols="40" rows="3" readonly v-model="url" onfocus="this.select();" id="url"></textarea>
+            <textarea cols="40" rows="6" readonly v-model="url" onfocus="this.select();" id="url"></textarea>
         </p>
         <h3 class="mb0">カスタムCSS（読み取り専用）</h3>
         <p>
@@ -150,6 +181,7 @@
         </ol>
         <h3>履歴</h3>
         <ul>
+            <li>ver004: 2023/05/02 ピックアイコン色設定追加・同方向連続ピックで色変更・ピック無入力アイコン表示追加</li>
             <li>ver003: 2023/02/25 OPENチップの文字ズレ修正</li>
             <li>ver002: 2023/01/15 チップグラフィック変更</li>
             <li>ver001: 2022/01/09 初版</li>

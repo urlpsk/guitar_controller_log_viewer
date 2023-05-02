@@ -70,8 +70,13 @@ $pick-height: 1px;
 
 $title-color: #84b6aa;
 
+$arrow-down: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 30 30"><path d="M15,30L0,0L15,15L30,0L15,30Z" /></svg>');
+$arrow-up: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 30 30"><path d="M15,0L0,30L15,15L30,30L15,0Z" /></svg>');
+$arrow-empty: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 30 30"><g><circle cx="15" cy="15" r="4"/></g></svg>');
+
 @mixin chip($map) {
   background: radial-gradient(map-get($map, center), map-get($map, middle), map-get($map, edge));
+  z-index: 9;
 }
 
 @mixin beam($map) {
@@ -85,6 +90,24 @@ $title-color: #84b6aa;
   &:after {
     @include chip(map-get($map, chip));
   }
+}
+
+@mixin arrow($svg) {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -28px;
+  width: 15px;
+  height: 15px;
+  margin-top: -7.5px;
+  -webkit-mask-image: $svg;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-image: $svg;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
 }
 
 body {
@@ -145,23 +168,20 @@ body {
 
     &.down {
       &:after {
-        content: url('../img/arrow_down.svg');
-        position: absolute;
-        top: 50%;
-        right: -28px;
-        width: 15px;
-        margin-top: -7.5px;
+        @include arrow($arrow-down);
       }
     }
 
     &.up {
       &:after {
-        content: url('../img/arrow_up.svg');
-        position: absolute;
-        top: 50%;
-        right: -28px;
-        width: 15px;
-        margin-top: -7.5px;
+        @include arrow($arrow-up);
+      }
+    }
+
+    &.isPickEmpty {
+      &:after {
+        @include arrow($arrow-empty);
+        right: -39px;
       }
     }
 
@@ -282,6 +302,13 @@ body {
 
     p {
       margin: 0 30px 0 0;
+    }
+  }
+
+  .color-setting {
+    span {
+      display: inline-block;
+      width: 80px;
     }
   }
 

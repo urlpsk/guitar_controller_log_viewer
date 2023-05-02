@@ -46,20 +46,56 @@ body {
   background-color: transparent;
 }
 .log li.down:after {
-  content: url("../img/arrow_down.svg");
+  content: "";
   position: absolute;
   top: 50%;
   right: -28px;
   width: 15px;
+  height: 15px;
   margin-top: -7.5px;
+  -webkit-mask-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 30 30"><path d="M15,30L0,0L15,15L30,0L15,30Z" /></svg>');
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 30 30"><path d="M15,30L0,0L15,15L30,0L15,30Z" /></svg>');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
 }
 .log li.up:after {
-  content: url("../img/arrow_up.svg");
+  content: "";
   position: absolute;
   top: 50%;
   right: -28px;
   width: 15px;
+  height: 15px;
   margin-top: -7.5px;
+  -webkit-mask-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 30 30"><path d="M15,0L0,30L15,15L30,30L15,0Z" /></svg>');
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 30 30"><path d="M15,0L0,30L15,15L30,30L15,0Z" /></svg>');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+.log li.isPickEmpty:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -28px;
+  width: 15px;
+  height: 15px;
+  margin-top: -7.5px;
+  -webkit-mask-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 30 30"><g><circle cx="15" cy="15" r="4"/></g></svg>');
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 30 30"><g><circle cx="15" cy="15" r="4"/></g></svg>');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  right: -39px;
 }
 .log li .lane {
   position: relative;
@@ -83,30 +119,35 @@ body {
 }
 .log li .lane.red:after {
   background: radial-gradient(#FFC3B8, #E12F3B, #A42833);
+  z-index: 9;
 }
 .log li .lane.green:before {
   background: linear-gradient(to right, #08250B, 45%, #4D684D, 55%, #08250B);
 }
 .log li .lane.green:after {
   background: radial-gradient(#B5FBBD, #4CD24E, #35933F);
+  z-index: 9;
 }
 .log li .lane.blue:before {
   background: linear-gradient(to right, #041A21, 45%, #475A5E, 55%, #041A21);
 }
 .log li .lane.blue:after {
   background: radial-gradient(#D6FFFF, #71BFF1, #315E85);
+  z-index: 9;
 }
 .log li .lane.yellow:before {
   background: linear-gradient(to right, #181408, 45%, #706857, 55%, #181408);
 }
 .log li .lane.yellow:after {
   background: radial-gradient(#FFFA8F, #F9DA79, #94712A);
+  z-index: 9;
 }
 .log li .lane.purple:before {
   background: linear-gradient(to right, #2A021F, 45%, #66475F, 55%, #2A021F);
 }
 .log li .lane.purple:after {
   background: radial-gradient(#FF80F9, #EF69DD, #7A0465);
+  z-index: 9;
 }
 .log li.down .lane:nth-child(1).open:after, .log li.up .lane:nth-child(1).open:after {
   background: linear-gradient(to right, #9D2982, #EF4CEA);
@@ -157,6 +198,10 @@ body {
 }
 .form .input-buttons p, .instruction .input-buttons p {
   margin: 0 30px 0 0;
+}
+.form .color-setting span, .instruction .color-setting span {
+  display: inline-block;
+  width: 80px;
 }
 .form li, .instruction li {
   padding: 8px 0 0;

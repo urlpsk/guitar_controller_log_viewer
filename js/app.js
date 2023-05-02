@@ -1,8 +1,10 @@
+const isDebug = false;
 const vm = Vue.createApp({
     data() {
         return {
             settings: {
                 buttons: ['4', '3', '2', '1', '0'],
+                colors: ['rgba(255,255,255,1)', 'rgba(255,192,192,1)', 'rgba(192,192,192,1)', 'rgba(192,255,192,1)', 'rgba(128,128,128,1)'],
                 picks: ['11', '12'],
                 frameHeight: 7,
                 laneHeight: 500,
@@ -18,6 +20,8 @@ const vm = Vue.createApp({
         init: function () {
             this.setSettingsFromUrl();
             this.itemReset();
+            this.updateColor();
+            let previousActivePick = '';
             (function loop() {
                 const gamePad = navigator.getGamepads()[0];
                 if (!gamePad || vm.isAnyButtonSettingInvalid()) {
@@ -40,17 +44,27 @@ const vm = Vue.createApp({
 
                 //pick
                 let anyPicked = false;
+                let isContinuousSamePick = false;
                 for (const pickName in vm.pickMap) {
                     const isPressed = gamePad.buttons[vm.pickMap[pickName]].pressed;
                     const isSamePick = vm.beforePick === pickName;
                     const isPickActive = isPressed && !isSamePick;
                     frameData.push(isPickActive);
+                    if (isPickActive) {
+                        if (previousActivePick === pickName) {
+                            isContinuousSamePick = true;
+                        }
+                        previousActivePick = pickName;
+                    }
                     if (isPressed) {
                         vm.beforePick = pickName;
                         anyPicked = true;
-                        break;
                     }
                 }
+                // continuousSamePick
+                frameData.push(isContinuousSamePick);
+                // pickEmpty
+                frameData.push(!anyPicked && vm.beforePick !== "");
                 if (!anyPicked) {
                     vm.beforePick = "";
                 }
@@ -67,21 +81,11 @@ const vm = Vue.createApp({
             }());
         },
         itemReset: function () {
-            //rgbyp, open, up, down,
-            /*
-            vm.frameItems = [
-                [1,1,1,1,1,0,1,0],
-                [0,0,0,0,0,1,0,1],
-                [1,1,1,0,0,0,0,0],
-                [0,1,0,0,1,0,1,0],
-                [0,0,0,1,0,0,0,1],
-                [0,0,0,0,0,1,0,0],
-                [0,0,0,0,0,1,1,0],
-                [0,0,0,0,0,1,0,1],
-                [1,0,0,0,0,0,0,0],
-            ]
-            */
-            vm.frameItems = Array.from(Array(vm.frameNumber), () => [0, 0, 0, 0, 0, 0, 0, 0]);
+            if (isDebug) {
+                vm.frameItems = vm.getDummyFrameItems();
+            } else {
+                vm.frameItems = Array.from(Array(vm.frameNumber), () => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            }
             this.displayUrl();
         },
         inputPreset: function (presets) {
@@ -113,7 +117,7 @@ const vm = Vue.createApp({
                         vm.settings.picks = v.split(',');
                         break;
                     case 'c':
-                        vm.settings.controllerRefreshRate = v;
+                        vm.settings.colors = v.split('|');
                         break;
                 }
             }
@@ -126,6 +130,7 @@ const vm = Vue.createApp({
                 't=' + vm.settings.transparent,
                 'b=' + vm.settings.buttons.join(','),
                 'p=' + vm.settings.picks.join(','),
+                'c=' + vm.settings.colors.join('|'),
             ];
             //GETパラメータを除外して追加
             vm.url = window.location.toString().replace(window.location.search, '') + '?' + params.join('&');
@@ -136,6 +141,57 @@ const vm = Vue.createApp({
                 .filter(item => {
                     return !/^\d+$/.test(item);
                 }).length > 0;
+        },
+        getDummyFrameItems() {
+            //rgbyp, open, up, down, continuousPick, pickEmpty
+            return [
+                [1,1,1,1,1,0,1,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,1,0,1,0,0],
+                [0,0,0,0,0,0,0,0,0,0],
+                [1,1,1,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0],
+                [1,0,0,0,0,0,0,0,0,0],
+                [1,0,0,0,0,0,0,1,0,0],
+                [1,0,0,0,0,0,0,0,0,1],
+                [1,1,0,0,0,0,0,0,0,0],
+                [1,1,0,0,0,0,1,0,0,0],
+                [1,1,0,0,0,0,0,0,0,1],
+                [1,0,1,0,0,0,0,0,0,0],
+                [1,0,1,0,0,0,0,1,0,0],
+                [1,0,1,0,0,0,0,0,0,1],
+                [1,0,0,0,0,0,0,0,0,0],
+                [1,0,0,0,0,0,0,1,1,0],
+                [1,0,0,0,0,0,0,0,0,1],
+                [1,1,0,0,0,0,0,0,0,0],
+                [1,1,0,0,0,0,0,1,1,0],
+                [1,1,0,0,0,0,0,0,0,1],
+                [0,0,0,1,0,0,0,0,0,0],
+                [0,0,0,1,0,0,1,0,0,0],
+                [0,0,0,1,0,0,0,0,0,1],
+                [1,0,0,0,0,0,0,0,0,0],
+                [1,0,0,0,0,0,0,1,0,0],
+                [1,0,0,0,0,0,0,0,0,1],
+                [1,1,0,0,0,0,0,0,0,0],
+                [1,1,0,0,0,0,1,0,0,0],
+                [1,1,0,0,0,0,0,0,0,1],
+                [1,0,1,0,0,0,0,0,0,0],
+                [1,0,1,0,0,0,0,1,0,0],
+                [1,0,1,0,0,0,0,0,0,1],
+                [0,1,0,0,0,0,0,0,0,0],
+                [0,1,0,0,0,0,1,0,0,0],
+                [0,1,0,0,0,0,0,0,0,1],
+                [1,0,0,0,0,0,0,0,0,0],
+                [1,0,0,0,0,0,0,1,0,0],
+                [1,0,0,0,0,0,0,0,0,1],
+            ];
+        },
+        updateColor: function () {
+            const stylesheet = document.styleSheets[1];
+            this.settings.colors.forEach(function (value, index) {
+                stylesheet.cssRules[index].style['background-color'] = value;
+            });
+            this.displayUrl();
         },
     },
     computed: {
